@@ -1,0 +1,21 @@
+// index.js
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+let trades = []; // Store trades (or use free DB like Render Postgres)
+
+// POST endpoint for master bot
+app.post('/trade', (req, res) => {
+  const { symbol, action, lot, timestamp } = req.body;
+  trades.push({ symbol, action, lot, timestamp });
+  res.json({ status: 'Trade received', symbol, action });
+});
+
+// GET endpoint for slave bot
+app.get('/trades', (req, res) => {
+  res.json(trades);
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(Server running on port ${PORT}));
